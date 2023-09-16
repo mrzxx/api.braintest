@@ -42,8 +42,6 @@ exports.get_categories_from_lang = async (lang="en")=> {
             where("category", '==', 1),
             orderBy('queue','asc')
           );
-        //const q = query(collection(firebase.db, "testdata"), where("lang", '==', lang),orWhere("category","==",1),orderBy('category','asc'),orderBy('queue','asc'));
-        //const querySnapshot = await getDocs(q);
         const [querySnapshot1, querySnapshot2] = await Promise.all([getDocs(q), getDocs(q2)]);
         const combinedResults = querySnapshot2.docs.concat(querySnapshot1.docs);
         if (!combinedResults.empty) {
@@ -58,7 +56,7 @@ exports.get_categories_from_lang = async (lang="en")=> {
             return data;
         } else {
             const error = new Error('get_categories_from_lang model hiç test bulunamadı!');
-            error.status = 404;  // İsteğe bağlı: Hata durumu kodunu belirtebiliriz
+            error.status = 404;
             throw error;
         }
     } catch (error) {

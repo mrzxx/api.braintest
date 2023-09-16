@@ -2,8 +2,10 @@ const express = require('express');
 const router = express.Router();
 
 const categoryController = require('../controllers/category');
+const testdataController = require('../controllers/testdata');
 // GET /:lang/categories
-router.get('/categories',categoryController.test_response);
+router.get('/test',categoryController.test_response);
 router.get('/:lang/categories',categoryController.show_categories_from_lang);
+router.get('/test/:testid', testdataController.show_test_by_id);
 
 module.exports = router;

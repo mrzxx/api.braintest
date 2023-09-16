@@ -19,20 +19,21 @@ if(production){
 }
 //For server.
 
+//Inc's here.
 const errorHandler = require('./middleware/error');
 const auth = require('./middleware/auth');
 const generalRoutes = require('./routes/general');
 
 app.use(bodyParser.json());
 
-//Auth inc.
+//Auth module here.
 app.use(auth);
 
-//Route inc.
+//Routes here.
 app.use(generalRoutes);
 
 
-//Err inc.
+//Error handler here.
 app.use(errorHandler);
 
 

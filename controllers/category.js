@@ -1,6 +1,3 @@
-const db = require('../database/database');
-const { getFirestore, collection, getDocs, getDoc, setDoc, updateDoc, doc,query,where,orderBy,limit } = require('firebase/firestore');
-const { getStorage, ref, uploadBytes, listAll, getBytes, getDownloadURL } = require('firebase/storage');
 const categoryModel = require('../models/categories');
 
 
