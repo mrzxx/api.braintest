@@ -10,10 +10,11 @@ const Auth = async (req,res,next) => {
         const docSnapshot = await getDoc(docRef);
 
         if (docSnapshot.exists()) {
+            req.user = docSnapshot.data();
             next();
         }else{
             const error = new Error('Kullanıcı girişinde hata!');
-            error.status = 404;  // İsteğe bağlı: Hata durumu kodunu belirtebiliriz
+            error.status = 404;
             throw error;
         }
 
