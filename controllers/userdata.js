@@ -18,3 +18,16 @@ exports.get_profile = async (req,res,next) => {
         next(error);
     }
 }
+exports.get_app_version = async (req,res,next) => {
+    try {
+        let data = await userdataModel.get_app_version();
+        if(data == undefined){
+            const error = new Error('Veritabanı boş döndü. Data çekilemedi _controllers');
+            error.status = 404;
+            throw error;
+        }
+        res.status(200).json(data);
+    } catch (error) {
+        next(error);
+    }
+}

@@ -24,3 +24,23 @@ exports.update_user_testresult = async (userId,testresult)=> {
         throw error;
     }
 }
+
+exports.get_app_version = async ()=> {
+    try {
+
+        const collectionRef = collection(firebase.db, 'server');
+        const docRef = doc(collectionRef, 'app');
+        const docSnapshot = await getDoc(docRef);
+
+        if (docSnapshot.exists()) {
+            return docSnapshot.data();
+        }else{
+            const error = new Error('Veritabanı boş döndü.Version çekilemedi. _models');
+            error.status = 404;
+            throw error;
+        }
+
+    } catch (error) {
+        throw error;
+    }
+}
