@@ -4,6 +4,12 @@ const { getDoc,doc,collection } = require('firebase/firestore');
 
 const Auth = async (req,res,next) => {
     try {
+        
+        if(req.headers['authorization'] == undefined){
+            const error = new Error('Auth Error.');
+            error.status = 401;
+            throw error;
+        }
 
         const collectionRef = collection(firebase.db, 'userdata');
         const docRef = doc(collectionRef, req.headers['authorization']);

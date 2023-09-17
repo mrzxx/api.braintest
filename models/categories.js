@@ -1,6 +1,6 @@
 const firebase = require('../database/database');
 const { getFirestore, collection, getDocs, getDoc, setDoc, updateDoc, doc,query,where,orWhere ,orderBy,limit } = require('firebase/firestore');
-const { getStorage, ref, uploadBytes, listAll, getBytes, getDownloadURL } = require('firebase/storage');
+//const { getStorage, ref, uploadBytes, listAll, getBytes, getDownloadURL } = require('firebase/storage');
 
 exports.get_categories_from_lang = async (lang="en")=> {
     /*

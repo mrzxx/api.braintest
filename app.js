@@ -25,6 +25,7 @@ const auth = require('./middleware/auth');
 const generalRoutes = require('./routes/general');
 
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 //Auth module here.
 app.use(auth);
