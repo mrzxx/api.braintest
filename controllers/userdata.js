@@ -2,6 +2,7 @@ const userdataModel = require('../models/userdata');
 const testdataModel = require('../models/testdata');
 
 exports.get_profile = async (req,res,next) => {
+    /*
     try {
         let data = {...req.user};
         let arr = Object.keys(data.testresult);
@@ -17,6 +18,15 @@ exports.get_profile = async (req,res,next) => {
     } catch (error) {
         next(error);
     }
+    */
+
+    try {
+        let data = {...req.user};
+        res.status(200).json(data);
+    } catch (error) {
+        next(error);
+    }
+
 }
 exports.get_app_version = async (req,res,next) => {
     try {
