@@ -4,7 +4,7 @@
   "description": "Brain Test Mobil Uygulaması için Geliştirilen API",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon app"
   },
   "keywords": [],
   "author": "",
@@ -13,6 +13,7 @@
     "body-parser": "^1.20.2",
     "express": "^4.18.2",
     "firebase": "^10.4.0",
-    "firebase-admin": "^11.10.1"
+    "firebase-admin": "^11.10.1",
+    "nodemon": "^3.0.1"
   }
 }
