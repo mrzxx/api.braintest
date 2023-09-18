@@ -30,15 +30,18 @@ exports.show_categories_from_lang = async (req,res,next) => {
         let returns = [{id:1,title:"Raven Test",tests:[]},{id:2,title:"Logic Test",tests:[]}];    
         for (let i = 0; i < data.length; i++) {
             let pick = data[i];
-            pick.questions = null;
+            //pick.questions = data[i].questions;
+            Object.keys(req.user.testresult).includes(data[i].testid) ? pick.solved=true : pick.solved=false;
+            Object.keys(req.user.testresult).includes(data[i].requiredtestid) ? pick.locked=false : pick.locked=true;
+            if(pick.solved){
+                pick.iq = req.user.testresult[data[i].testid].iq;
+            }
             if(pick.category == 1){
-                Object.keys(req.user.testresult).includes(data[i].testid) ? pick.solved=true : pick.solved=false;
-                Object.keys(req.user.testresult).includes(data[i].requiredtestid) ? pick.locked=false : pick.locked=true;
+
                 if(data[i].requiredtestid == 0) pick.locked = false;
                 returns[0].tests.push(pick);
             }else{
-                Object.keys(req.user.testresult).includes(data[i].testid) ? pick.solved=true : pick.solved=false;
-                Object.keys(req.user.testresult).includes(data[i].requiredtestid) ? pick.locked=false : pick.locked=true;
+
                 if(data[i].requiredtestid == 0) pick.locked = false;
                 returns[1].tests.push(pick);
             }
