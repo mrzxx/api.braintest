@@ -1,0 +1,16 @@
+<h1>Eklenmiş Testler</h1>
+<ul>
+    <% data.forEach(function(prop) { %>
+        <li>
+            <a href="/admin/test/<%- prop["testid"] %>">
+                <strong><%- prop["title"] %></strong>
+                <small>-> <%- prop["requiredtesttitle"] %></small>
+                <small>-> <%- prop["category"] %></small>
+                <small>-> <%- prop["lang"] %></small>
+            </a>
+            
+        </li>
+       
+     <% }); %>
+</ul>
+

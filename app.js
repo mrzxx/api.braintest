@@ -23,9 +23,14 @@ if(production){
 const errorHandler = require('./middleware/error');
 const auth = require('./middleware/auth');
 const generalRoutes = require('./routes/general');
+const adminRoutes = require('./routes/admin');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+
+//Admin Routes here.
+//app.use('/admin', adminRoutes);
 
 //Auth module here.
 app.use(auth);

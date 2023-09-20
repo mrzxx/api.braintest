@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="tr">
+  
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content=
+        "width=device-width, initial-scale=1.0">
+    <style>
+        .container {
+            width: 1200px;
+            margin: auto;
+        }
+    </style>
+</head>
+  
+<body>
+    <div class="container">
+        <h1><%= data["title"] %></h1>
+
+        <ul>
+            <% Object.keys(data).forEach(function(prop) { %>
+                <li>
+                    <strong><%- prop%>:</strong>
+                    <% if(prop != "questions"){ %>
+                        <span><%- data[prop]%></span>
+                        
+                   <% }else if(prop == "questions_de"){
+                    %><strong>***<%= data[prop].length%>***</strong> <%
+                   }else{
+                    %>
+                    <strong>***<%= data[prop].length %>***</strong>
+                    <%
+                   } %>
+                    
+                </li>
+               
+             <% }); %>
+        </ul>
+        <% if(data["category"] == "1"){ %>
+        <h2>Soru Yükle:</h2>
+        <form action="/admin/test/question/add/" method="POST" enctype="multipart/form-data">
+            <label for="">Soru Resmi:</label>
+            <input type="file" name="question" id="">
+            <label for="">Şıklar Resmi:</label>
+            <input type="file" multiple name="choices" id="">
+            <input type="hidden" id="testid" name="testid" value="<%=testid%>">
+            <input type="submit" value="Yükle">
+        </form>
+        <% }else if(data["category"] == "2"){
+            %>
+            <form action="/admin/test/question/add/2/" method="POST">
+                <label for="">Soru Metni:</label><br>
+                <textarea name="question" id="" cols="60" rows="10"></textarea><br>
+                <label for="">Şıklar Metni: ( ** ile ayrılır )</label><br>
+                <textarea name="choices" id="" cols="60" rows="10"></textarea><br>
+                <input type="hidden" id="testid" name="testid" value="<%=testid%>">
+                <input type="submit" value="Oluştur">
+            </form>
+            <%
+        } %>
+        <h2>Sorular:</h2>
+        <% 
+        let totaliq = 0;
+        for (var i = 0; i < data[`questions`].length; i++) { 
+            if(data[`questions`][i]["iqscore"] != undefined && data[`questions`][i]["iqscore"] != ""){
+                totaliq += parseInt(data[`questions`][i]["iqscore"]);
+            }
+         } %>
+        <h3>Total IQ Score: <strong id="totaliqwrite0"><%- totaliq %></strong> </h3>
+        <% if(data["category"] == "1"){ %>
+        <ul>
+            <% for (var i = 0; i < data["questions"].length; i++) { %>
+            <li>
+                <strong>QuestionId: <%= data["questions"][i]["questionid"] %></strong><br>
+                <span>IQ Score: </span>
+                <strong class="iqscorewrite" id="iqscore<%=data["questions"][i]["questionid"]%>"><%= data["questions"][i]["iqscore"] %></strong><br>
+                <input type="text" name="" id="textbox<%= data["questions"][i]["questionid"] %>">
+                <button questionid="<%= data['questions'][i]['questionid'] %>" onclick="updateIQ(this)">TIKLA</button><br>
+                <img src="<%= data["questions"][i]["url"] %>" width="200" height="200" alt=""><br>
+                <strong>Seçenekler:Cevap(<span id="question<%= data["questions"][i]["questionid"] %>"><%= data["questions"][i]["answerid"] %></span>)</strong><br>
+                <% for (var j = 0; j < data["questions"][i]["answers"].length; j++) { %>
+                    <a answerid="<%= data["questions"][i]["answers"][j]["id"] %>" questionid="<%= data["questions"][i]["questionid"] %>" style="display:inline-block;" onclick="gonder(this)">
+                        <% if (data["questions"][i]["answerid"] == data["questions"][i]["answers"][j]["id"]) { %>
+                            <img style="border:6px solid yellow;padding:3px;" src="<%= data["questions"][i]["answers"][j]["url"] %>" width="100" height="100" alt="">
+                        <%} else { %>
+                            <img src="<%= data["questions"][i]["answers"][j]["url"] %>" width="100" height="100" alt="">
+                        <% } %>
+                    
+                    </a>
+                <% } %>
+                
+            </li>
+            <hr>
+            <% } %>
+        </ul>
+        <% }else if(data["category"] == "2"){ %>
+            <ul>
+                <% for (var i = 0; i < data[`questions`].length; i++) { %>
+                <li>
+                    <strong>QuestionId: <%= data[`questions`][i]["questionid"] %></strong><a style="margin-left:15px;" href="#" onclick="deleteQuestionTypeText(this)" questionid="<%=data[`questions`][i]["questionid"]%>">DELETE (X)</a> <br>
+                    <span>IQ Score: </span>
+                    <strong class="iqscorewrite" id="iqscore<%=data[`questions`][i]["questionid"]%>"><%= data[`questions`][i]["iqscore"] %></strong><br>
+                    <input type="text" name="" id="textbox<%= data[`questions`][i]["questionid"] %>">
+                    <button questionid="<%= data['questions'][i]['questionid'] %>" onclick="updateIQ(this)">TIKLA</button><br>
+                    <p><%= data[`questions`][i]["text"] %></p>
+                    <strong>Seçenekler:Cevap(<span id="question<%= data[`questions`][i]["questionid"] %>"><%= data[`questions`][i]["answerid"] %></span>)</strong><br>
+                    <% for (var j = 0; j < data[`questions`][i]["answers"].length; j++) { %>
+                        <a answerid="<%= data[`questions`][i]["answers"][j]["id"] %>" questionid="<%= data[`questions`][i]["questionid"] %>" style="display:inline-block;" onclick="gonder(this)">
+                        <% if (data[`questions`][i]["answerid"] == data[`questions`][i]["answers"][j]["id"]) { %>
+                            <p style="padding:3px;border:6px solid yellow"><%= data[`questions`][i]["answers"][j]["text"] %></p>
+                        <%} else { %>
+                            <p style="color:#000"><%= data[`questions`][i]["answers"][j]["text"] %></p>
+                        <% } %>
+                    
+                        </a>
+                    <% } %>
+                </li>
+                <% } %>
+            </ul>
+        <% } %>
+    </div>
+  
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity=
+        "sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" 
+        crossorigin="anonymous">
+    </script>
+    <script>
+        function updateIQ(val){
+            let questionid = val.getAttribute("questionid");
+            let iqscore = document.getElementById(`textbox${questionid}`).value;
+            let testid = document.getElementById("testid").value;
+            let wiq = document.getElementById(`iqscore${questionid}`);
+            let collection = document.getElementsByClassName("iqscorewrite");
+            let totaliqwrite0 = document.getElementById("totaliqwrite0");
+            let totalmyiq = 0;
+            $.post("/admin/test/question/update/iqscore",
+            {
+                testid:testid,
+                questionid: questionid,
+                iqscore: iqscore
+            },
+            function (data, status) {
+                if(data == 1){
+                    wiq.innerHTML = iqscore;
+                    for (let m = 0; m < collection.length; m++) {
+                        if(collection[m].innerHTML != ""){
+                            totalmyiq+= parseInt(collection[m].innerHTML);
+                        }
+                        
+                    }
+                    totaliqwrite0.innerHTML = totalmyiq;
+                    
+                    
+                }
+            });
+        }
+        function deleteQuestionTypeText(val){
+            let questionid = val.getAttribute("questionid");
+            let testid = document.getElementById("testid").value;
+            if(confirm("Silmek istediğinize emin misiniz?")){
+                $.post("/admin/test/question/delete/2",
+                {
+                    testid:testid,
+                    questionid: questionid,
+                },
+                function (data, status) {
+                    if(data == 1){
+                        
+                        val.parentElement.remove();
+                        
+                    }
+                });
+            }
+            
+        }
+        function gonder(element) {
+            let questionid = element.getAttribute("questionid");
+            let answerid = element.getAttribute("answerid");
+            let testid = document.getElementById("testid").value;
+            let span = document.getElementById(`question${questionid}`);
+            $.post("/admin/test/answer/update",
+         {
+            testid:testid,
+            questionid: questionid,
+            answerid: answerid,
+         },
+         function (data, status) {
+            if(data == 1){
+                span.innerHTML = answerid;
+                
+                for (let index = 0; index < element.parentElement.children.length; index++) {
+                    try {
+                        element.parentElement.children[index].children[0].style = "";
+                    } catch (error) {
+                        
+                    }
+                }
+                element.children[0].style = "padding:3px;border:6px solid yellow";
+                
+                
+            }
+         });
+        }
+
+    </script>
+</body>
+  
+</html>

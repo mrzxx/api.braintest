@@ -1,10 +1,5 @@
 const categoryModel = require('../models/categories');
 
-
-exports.test_response = (req,res,next) => {
-    res.json({message:"Success",statusCode:201});
-}
-
 exports.show_categories_from_lang = async (req,res,next) => {
 
     /*
