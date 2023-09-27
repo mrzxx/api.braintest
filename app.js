@@ -32,7 +32,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 //Admin Routes here.
-//app.use('/admin', adminRoutes);
+app.use('/admin', adminRoutes);
 
 //Auth module here.
 //app.use(auth);

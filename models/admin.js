@@ -42,7 +42,7 @@ exports.updateTestQuestions = async (testid,questions) => {
 exports.uploadFile = async (id,questionNumber,name, buffer, metadata) => {
 
     try {
-        const storageRef = ref(storage, `testdata/${id}/${questionNumber}/${name}`);
+        const storageRef = ref(firebase.storage, `testdata/${id}/${questionNumber}/${name}`);
         let snapshot = await uploadBytes(storageRef, buffer, metadata);
         let myref = getFileRef(snapshot.metadata.fullPath);
         let url = await getDownloadURL(myref);

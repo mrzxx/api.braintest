@@ -30,11 +30,11 @@ exports.show_categories_from_lang = async (req,res,next) => {
         for (let i = 0; i < data.length; i++) {
             let pick = data[i];
             //pick.questions = data[i].questions;
-            Object.keys(req.user.testresult).includes(data[i].testid) ? pick.solved=true : pick.solved=false;
-            Object.keys(req.user.testresult).includes(data[i].requiredtestid) ? pick.locked=false : pick.locked=true;
+            Object.keys(req.user.testresult).includes(pick.testid.toString()) ? pick.solved=true : pick.solved=false;
+            Object.keys(req.user.testresult).includes(pick.requiredtestid.toString()) ? pick.locked=false : pick.locked=true;
             if(pick.solved){
-                pick.iq = req.user.testresult[data[i].testid].iq;
-                
+                pick.iq = req.user.testresult[pick.testid].iq;
+                pick.locked = false;
             }
             if(pick.category == 1){
                 if(pick.solved){

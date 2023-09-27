@@ -47,11 +47,11 @@ exports.get_app_version = async (req,res,next) => {
 
 
 
-exports.send_notification_about_test = async (req,res,next) => {
+exports.send_notification_about_test = async () => {
 
     try {
         
-
+        let totalNot = 0;
         let users = await userdataModel.get_all_user();
         for (let index = 0; index < users.length; index++) {
 
@@ -59,12 +59,12 @@ exports.send_notification_about_test = async (req,res,next) => {
 
             const user = users[index];
             //HERE LOG
-            console.log(user.data.devicetoken);
+            //console.log(user.data.devicetoken);
             //HERE LOG
             if(user.data.devicetoken != undefined){
                 
 
-
+            
 
 
                 let model = {
@@ -80,33 +80,58 @@ exports.send_notification_about_test = async (req,res,next) => {
                 let test2info = 0;
                 for (let i = 0; i < data.length; i++) {
                     let pick = data[i];
+                    if(pick.testid == "1694897574613"){
+                        console.log(Object.keys(model.testresult));
+                        console.log("mk");
+                        console.log(pick.requiredtestid);
+                    }
                     //pick.questions = data[i].questions;
-                    Object.keys(req.user.testresult).includes(data[i].testid) ? pick.solved=true : pick.solved=false;
-                    Object.keys(req.user.testresult).includes(data[i].requiredtestid) ? pick.locked=false : pick.locked=true;
-
+                    Object.keys(model.testresult).includes(pick.testid.toString()) ? pick.solved=true : pick.solved=false;
+                    Object.keys(model.testresult).includes(pick.requiredtestid.toString()) ? pick.locked=false : pick.locked=true;
+                    if(pick.requiredtestid == 0){
+                        pick.locked = false;
+                    }
+                
+                    
                     if(pick.category    ==     1 && pick.solved    ==  false && pick.locked    ==  false){
+                   
                         //FOUND RAVEN TEST
                         test1info = {...pick};
                     }else if(pick.category == 2 && pick.solved == false && pick.locked == false){
+                      
                         //FOUND LOGIC TEST
                         test2info = {...pick};
                     }
                 }
 
                 if(test1info != 0){
+              
                     let title = test1info.title
                     let noti = {
                         title:title,
                         body:'Eyvallah sayende 100kya yaklaşıyoruz.'
                     }
-                    firebaseNotification(noti,model.token);
+                    let ret = await firebaseNotification(noti,model.token);
+                    
+                    totalNot+=1;
                 }else if(test2info != 0){
+              
                     let title = test2info.title
                     let noti = {
                         title:title,
                         body:'Eyvallah sayende 100kya yaklaşıyoruz.'
                     }
-                    firebaseNotification(noti,model.token);
+                    let ret = await firebaseNotification(noti,model.token);
+                    
+                    totalNot+=1;
+                }else{
+                    let noti = {
+                        title:"Daha fazla test çözebilmek için",
+                        body:'Abone ol sikerim.'
+                    }
+                    let ret = await firebaseNotification(noti,model.token);
+                    
+                    totalNot+=1;
                 }
                 //FOUND AND SEND NOTIFICATION AREA
 
@@ -121,7 +146,54 @@ exports.send_notification_about_test = async (req,res,next) => {
 
             
         }
-        return 1;
+        return totalNot;
+    } catch (error) {
+        console.log("hata");
+        throw error;
+    }
+
+
+
+}
+
+
+
+exports.send_notification_custom = async (req,res,next) => {
+
+    try {
+        let data = req.body.data;
+        /*
+        data:{'en':{title:test,body:zaa},'de':{title:test_de,body:zaa_de}};
+        */
+
+        let totalNot = 0;
+        let users = await userdataModel.get_all_user();
+        for (let index = 0; index < users.length; index++) {
+
+
+
+            const user = users[index];
+            //HERE LOG
+            console.log(user.data.devicetoken);
+            //HERE LOG
+            if(user.data.devicetoken != undefined){
+            
+                let model = {
+                    lang:'en',
+                    testresult:user.data.testresult,
+                    token:user.data.devicetoken
+                }
+                if(user.data.lang != undefined){model.lang = user.data.lang;}
+
+    
+                firebaseNotification(data[model.lang],model.token);
+                totalNot+=1;
+
+            }
+
+            
+        }
+        return totalNot;
     } catch (error) {
         next(error);
     }

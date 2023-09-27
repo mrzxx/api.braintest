@@ -2,13 +2,14 @@ const admin = require('./admin');
 async function sendNotification (data,token) {
     try {
         let message = {
-            data: data,
+            notification: data,
             token: token
         };
         let response = await admin.messaging().send(message);
         console.log('Bildirim gönderildi:', response);
-        return 1;
+        return response;
     } catch (error) {
+        console.error(error);
         throw error;
     }
 }
