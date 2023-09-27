@@ -103,14 +103,14 @@
                     <strong class="iqscorewrite" id="iqscore<%=data[`questions`][i]["questionid"]%>"><%= data[`questions`][i]["iqscore"] %></strong><br>
                     <input type="text" name="" id="textbox<%= data[`questions`][i]["questionid"] %>">
                     <button questionid="<%= data['questions'][i]['questionid'] %>" onclick="updateIQ(this)">TIKLA</button><br>
-                    <p><%= data[`questions`][i]["text"] %></p>
+                    <p><%= data[`questions`][i]["url"] %></p>
                     <strong>Seçenekler:Cevap(<span id="question<%= data[`questions`][i]["questionid"] %>"><%= data[`questions`][i]["answerid"] %></span>)</strong><br>
                     <% for (var j = 0; j < data[`questions`][i]["answers"].length; j++) { %>
                         <a answerid="<%= data[`questions`][i]["answers"][j]["id"] %>" questionid="<%= data[`questions`][i]["questionid"] %>" style="display:inline-block;" onclick="gonder(this)">
                         <% if (data[`questions`][i]["answerid"] == data[`questions`][i]["answers"][j]["id"]) { %>
-                            <p style="padding:3px;border:6px solid yellow"><%= data[`questions`][i]["answers"][j]["text"] %></p>
+                            <p style="padding:3px;border:6px solid yellow"><%= data[`questions`][i]["answers"][j]["url"] %></p>
                         <%} else { %>
-                            <p style="color:#000"><%= data[`questions`][i]["answers"][j]["text"] %></p>
+                            <p style="color:#000"><%= data[`questions`][i]["answers"][j]["url"] %></p>
                         <% } %>
                     
                         </a>

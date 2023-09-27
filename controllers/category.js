@@ -22,7 +22,7 @@ exports.show_categories_from_lang = async (req,res,next) => {
 
     try {
         const data = await categoryModel.get_categories_from_lang(req.params.lang);
-        let returns = [{id:1,title:"Raven Test",tests:[],raveniq:0},{id:2,title:"Logic Test",tests:[],logiciq:0}];   
+        let returns = [{id:1,title:"Raven Test",tests:[],iq:0},{id:2,title:"Logic Test",tests:[],iq:0}];   
         let raventotal = 0; 
         let ravensolvedcount = 0;
         let logictotal = 0; 
@@ -52,8 +52,8 @@ exports.show_categories_from_lang = async (req,res,next) => {
                 returns[1].tests.push(pick);
             }
         }
-        returns[0].raveniq = raventotal/ravensolvedcount;
-        returns[1].logiciq = logictotal/logicsolvedcount;
+        returns[0].iq = raventotal/ravensolvedcount;
+        returns[1].iq = logictotal/logicsolvedcount;
         res.status(200).json(returns);
     } catch (error) {
         next(error);

@@ -85,7 +85,7 @@ exports.createTest = async (req,res,next) => {
             queue:lastqueue
         };
         let j = await adminModel.createTest(data);
-        res.redirect('/admin/test');
+        res.redirect('/admin/'+req.body.lang+'/test');
     } catch (error) {
         next(error);   
     }
@@ -97,8 +97,8 @@ exports.createTest = async (req,res,next) => {
 exports.addQuestion = async (req, res,next) => {
 
     try {
-        let data = await testdataModel.get_test_by_id(req.body.testid);
-        data = data.questions;
+        const testinfo = await testdataModel.get_test_by_id(req.body.testid);
+        data = testinfo.questions;
         let lastId;
         let index = parseInt((Object.keys(data).length));//new index
         if(index == 0 || data == []){
@@ -140,8 +140,8 @@ exports.addQuestion = async (req, res,next) => {
 exports.addQuestionTypeText = async (req,res,next) => {
 
     try {
-        let data = await testdataModel.get_test_by_id(req.body.testid);
-        data = data.questions;
+        const testinfo = await testdataModel.get_test_by_id(req.body.testid);
+        data = testinfo.questions;
     
         let lastId;
         let index = parseInt((Object.keys(data).length));//new index
@@ -151,12 +151,12 @@ exports.addQuestionTypeText = async (req,res,next) => {
             lastId = parseInt(data[index-1]["questionid"]) + 1;
         }
         //Question UPLAOD
-        data[index] = {answerid:1,answers:[],questionid:lastId,text:req.body.question};
+        data[index] = {answerid:1,answers:[],questionid:lastId,url:req.body.question};
         let carray = (req.body.choices).split('**');
         for (let j = 0; j < carray.length; j++) {
             let choice = carray[j].trim();
             if(choice != ""){
-                data[index].answers.push({id:data[index].answers.length+1,text:choice});
+                data[index].answers.push({id:data[index].answers.length+1,url:choice});
             }
             
         }
@@ -179,8 +179,8 @@ exports.addQuestionTypeText = async (req,res,next) => {
 exports.updateQuestionAnswer = async (req, res,next) => {
 
     try {
-        const data = await testdataModel.get_test_by_id(req.body.testid);
-        data = data.questions;
+        const testinfo = await testdataModel.get_test_by_id(req.body.testid);
+        data = testinfo.questions;
         for (let i = 0; i < Object.keys(data).length; i++) {
             if(data[i]["questionid"] == req.body.questionid){
                 data[i]["answerid"] = req.body.answerid;
@@ -200,8 +200,8 @@ exports.updateQuestionAnswer = async (req, res,next) => {
 exports.updateQuestionIQVal = async (req,res,next) => {
 
     try {
-        const data = await testdataModel.get_test_by_id(req.body.testid);
-        data = data.questions;
+        const testinfo = await testdataModel.get_test_by_id(req.body.testid);
+        data = testinfo.questions;
         for (let i = 0; i < Object.keys(data).length; i++) {
             if(data[i]["questionid"] == req.body.questionid){
                 data[i]["iqscore"] = req.body.iqscore;
