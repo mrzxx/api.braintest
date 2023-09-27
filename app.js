@@ -24,20 +24,21 @@ const errorHandler = require('./middleware/error');
 const auth = require('./middleware/auth');
 const generalRoutes = require('./routes/general');
 const adminRoutes = require('./routes/admin');
+const userData = require('./controllers/userdata');
+const userdataModel =  require('./models/userdata');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
 //Admin Routes here.
-app.use('/admin', adminRoutes);
+//app.use('/admin', adminRoutes);
 
 //Auth module here.
 //app.use(auth);
 
 //Routes here.
 app.use(generalRoutes);
-
 
 //Error handler here.
 app.use(errorHandler);
@@ -66,3 +67,17 @@ if(!production){
   });
 }
 //RUN SERVER
+
+async function test(){
+  let data = await userData.send_notification_about_test();
+  console.log(data);
+}
+
+async function get_time(){
+  let data = await userdataModel.get_app_version();
+  let time = data.notification;
+  const intervalInMilliseconds = time * 1000;
+  setInterval(test, intervalInMilliseconds);
+}
+get_time();
+

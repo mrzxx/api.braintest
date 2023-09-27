@@ -44,3 +44,19 @@ exports.get_app_version = async ()=> {
         throw error;
     }
 }
+
+exports.get_all_user = async ()=> {
+    try {
+        const collectionRef = collection(firebase.db, 'userdata');
+        const querySnapshot = await getDocs(collectionRef);
+    
+        const documents = [];
+        querySnapshot.forEach((doc) => {
+          documents.push({ id: doc.id, data: doc.data() });
+        });
+    
+        return documents;
+      } catch (error) {
+        throw error;
+      }
+}
