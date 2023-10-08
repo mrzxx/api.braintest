@@ -21,6 +21,9 @@ exports.show_categories_from_lang = async (req,res,next) => {
     */
 
     try {
+        
+        let user_sub = req.user.subscription;
+        
         const data = await categoryModel.get_categories_from_lang(req.params.lang);
         let returns = [{id:1,title:"Raven Test",tests:[],iq:0},{id:2,title:"Logic Test",tests:[],iq:0}];   
         let raventotal = 0; 
@@ -32,6 +35,12 @@ exports.show_categories_from_lang = async (req,res,next) => {
             //pick.questions = data[i].questions;
             Object.keys(req.user.testresult).includes(pick.testid.toString()) ? pick.solved=true : pick.solved=false;
             Object.keys(req.user.testresult).includes(pick.requiredtestid.toString()) ? pick.locked=false : pick.locked=true;
+            
+            //PREMIUM USER UPDATE
+            if(user_sub){
+                pick.locked = false;
+            }
+            //PREMIUM USER UPDATE
             if(pick.solved){
                 pick.iq = req.user.testresult[pick.testid].iq;
                 pick.locked = false;

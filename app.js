@@ -21,6 +21,7 @@ if(production){
 
 //Inc's here.
 const errorHandler = require('./middleware/error');
+const error404Handler = require('./middleware/error404');
 const auth = require('./middleware/auth');
 const generalRoutes = require('./routes/general');
 const adminRoutes = require('./routes/admin');
@@ -35,7 +36,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/admin', adminRoutes);
 
 //Auth module here.
-//app.use(auth);
+app.use(auth);
 
 //Routes here.
 app.use(generalRoutes);
@@ -54,13 +55,16 @@ async function get_time(){
   const intervalInMilliseconds = time * 1000;
   setInterval(test, intervalInMilliseconds);
 }
-get_time();
+//get_time();
 
 
 
 
 //Error handler here.
 app.use(errorHandler);
+
+//Error handler here.
+app.use(error404Handler);
 
 
 

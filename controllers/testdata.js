@@ -79,7 +79,7 @@ exports.complete_test = async (req,res,next) => {
             //if(gettest.reqired)
             
             let user_answers = req.body;
-            console.log(req.body);
+
             if(user_answers == undefined){
                 const error = new Error('HATALI POST Hocam hala öğrenemedin mi?.');
                 error.status = 404;

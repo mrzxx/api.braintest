@@ -183,7 +183,7 @@ exports.updateQuestionAnswer = async (req, res,next) => {
         data = testinfo.questions;
         for (let i = 0; i < Object.keys(data).length; i++) {
             if(data[i]["questionid"] == req.body.questionid){
-                data[i]["answerid"] = req.body.answerid;
+                data[i]["answerid"] = parseInt(req.body.answerid);
             }
         }
         let check = await adminModel.updateTestQuestions(req.body.testid,data);
