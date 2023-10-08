@@ -40,6 +40,25 @@ app.use('/admin', adminRoutes);
 //Routes here.
 app.use(generalRoutes);
 
+
+
+
+async function test(){
+  let data = await userData.send_notification_about_test();
+  console.log(data);
+}
+
+async function get_time(){
+  let data = await userdataModel.get_app_version();
+  let time = data.notification;
+  const intervalInMilliseconds = time * 1000;
+  setInterval(test, intervalInMilliseconds);
+}
+get_time();
+
+
+
+
 //Error handler here.
 app.use(errorHandler);
 
@@ -68,16 +87,4 @@ if(!production){
 }
 //RUN SERVER
 
-async function test(){
-  let data = await userData.send_notification_about_test();
-  console.log(data);
-}
-
-async function get_time(){
-  let data = await userdataModel.get_app_version();
-  let time = data.notification;
-  const intervalInMilliseconds = time * 1000;
-  setInterval(test, intervalInMilliseconds);
-}
-get_time();
 

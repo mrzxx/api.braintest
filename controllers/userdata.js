@@ -80,11 +80,7 @@ exports.send_notification_about_test = async () => {
                 let test2info = 0;
                 for (let i = 0; i < data.length; i++) {
                     let pick = data[i];
-                    if(pick.testid == "1694897574613"){
-                        console.log(Object.keys(model.testresult));
-                        console.log("mk");
-                        console.log(pick.requiredtestid);
-                    }
+
                     //pick.questions = data[i].questions;
                     Object.keys(model.testresult).includes(pick.testid.toString()) ? pick.solved=true : pick.solved=false;
                     Object.keys(model.testresult).includes(pick.requiredtestid.toString()) ? pick.locked=false : pick.locked=true;
@@ -127,7 +123,7 @@ exports.send_notification_about_test = async () => {
                 }else{
                     let noti = {
                         title:"Daha fazla test çözebilmek için",
-                        body:'Abone ol sikerim.'
+                        body:'Abone ol seri köz lazım.Panele bilgi gonderildi bir kullanici daha sinirda.'
                     }
                     let ret = await firebaseNotification(noti,model.token);
                     
@@ -148,8 +144,7 @@ exports.send_notification_about_test = async () => {
         }
         return totalNot;
     } catch (error) {
-        console.log("hata");
-        throw error;
+        console.error(error);
     }
 
 
