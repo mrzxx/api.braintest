@@ -29,20 +29,33 @@ exports.get_categories_from_lang = async (lang="en")=> {
 */
 
     try {
-        const q = query(
+        //LOGIC TESTS
+        let q = query(
             collection(firebase.db, "testdata"),
             where("lang", '==', lang),
-            where("category","!=",1),
+            where("category","==",2),
             orderBy('category','asc'),
             orderBy('queue','asc')
           );
           
-          const q2 = query(
+          //RAVEN TESTS
+          let q2 = query(
             collection(firebase.db, "testdata"),
             where("category", '==', 1),
             orderBy('queue','asc')
           );
-        const [querySnapshot1, querySnapshot2] = await Promise.all([getDocs(q), getDocs(q2)]);
+        let [querySnapshot1, querySnapshot2] = await Promise.all([getDocs(q), getDocs(q2)]);
+        if(querySnapshot1.empty){
+            //THERE IS NO TEST FOR THIS LANGUAGE
+            q = query(
+                collection(firebase.db, "testdata"),
+                where("lang", '==', "en"),
+                where("category","==",2),
+                orderBy('category','asc'),
+                orderBy('queue','asc')
+              );
+              querySnapshot1 = await getDocs(q);
+        }
         const combinedResults = querySnapshot2.docs.concat(querySnapshot1.docs);
         if (!combinedResults.empty) {
             let data = [];
