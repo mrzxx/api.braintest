@@ -58,6 +58,17 @@
                 <input type="submit" value="Oluştur">
             </form>
             <%
+        }else if(data["category"] == "3"){
+            %>
+            <form action="/admin/test/question/add/3/" method="POST" enctype="multipart/form-data">
+                <label for="">Soru Resmi:</label>
+                <input type="file" name="question" id="">
+                <label for="">Şıklar Metni: ( ** ile ayrılır )</label><br>
+                <textarea name="choices" id="" cols="60" rows="10"></textarea><br>
+                <input type="hidden" id="testid" name="testid" value="<%=testid%>">
+                <input type="submit" value="Oluştur">
+            </form>
+            <%
         } %>
         <h2>Sorular:</h2>
         <% 
@@ -118,6 +129,30 @@
                 </li>
                 <% } %>
             </ul>
+        <% }else if(data["category"] == "3"){ %>
+            <ul>
+                <% for (var i = 0; i < data[`questions`].length; i++) { %>
+                <li>
+                    <strong>QuestionId: <%= data[`questions`][i]["questionid"] %></strong><a style="margin-left:15px;" href="#" onclick="deleteQuestionTypeFunny(this)" questionid="<%=data[`questions`][i]["questionid"]%>">DELETE (X)</a> <br>
+                    <span>IQ Score: </span>
+                    <strong class="iqscorewrite" id="iqscore<%=data[`questions`][i]["questionid"]%>"><%= data[`questions`][i]["iqscore"] %></strong><br>
+                    <input type="text" name="" id="textbox<%= data[`questions`][i]["questionid"] %>">
+                    <button questionid="<%= data['questions'][i]['questionid'] %>" onclick="updateIQ(this)">TIKLA</button><br>
+                    <img src="<%= data["questions"][i]["url"] %>" width="200" height="200" alt=""><br>
+                    <strong>Seçenekler:Cevap(<span id="question<%= data[`questions`][i]["questionid"] %>"><%= data[`questions`][i]["answerid"] %></span>)</strong><br>
+                    <% for (var j = 0; j < data[`questions`][i]["answers"].length; j++) { %>
+                        <a answerid="<%= data[`questions`][i]["answers"][j]["id"] %>" questionid="<%= data[`questions`][i]["questionid"] %>" style="display:inline-block;" onclick="gonder(this)">
+                        <% if (data[`questions`][i]["answerid"] == data[`questions`][i]["answers"][j]["id"]) { %>
+                            <p style="padding:3px;border:6px solid yellow"><%= data[`questions`][i]["answers"][j]["url"] %></p>
+                        <%} else { %>
+                            <p style="color:#000"><%= data[`questions`][i]["answers"][j]["url"] %></p>
+                        <% } %>
+                    
+                        </a>
+                    <% } %>
+                </li>
+                <% } %>
+            </ul>
         <% } %>
     </div>
   
@@ -161,6 +196,25 @@
             let testid = document.getElementById("testid").value;
             if(confirm("Silmek istediğinize emin misiniz?")){
                 $.post("/admin/test/question/delete/2",
+                {
+                    testid:testid,
+                    questionid: questionid,
+                },
+                function (data, status) {
+                    if(data == 1){
+                        
+                        val.parentElement.remove();
+                        
+                    }
+                });
+            }
+            
+        }
+        function deleteQuestionTypeFunny(val){
+            let questionid = val.getAttribute("questionid");
+            let testid = document.getElementById("testid").value;
+            if(confirm("Silmek istediğinize emin misiniz?")){
+                $.post("/admin/test/question/delete/3",
                 {
                     testid:testid,
                     questionid: questionid,

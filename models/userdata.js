@@ -60,3 +60,17 @@ exports.get_all_user = async ()=> {
         throw error;
       }
 }
+
+
+
+
+exports.update_user_device_token = async (userId,devicetoken)=> {
+    try {
+        const docSnapshot = await updateDoc(doc(firebase.db, "userdata", userId), {
+            devicetoken: devicetoken
+        });
+        return 1;
+    } catch (error) {
+        return -1;
+    }
+}

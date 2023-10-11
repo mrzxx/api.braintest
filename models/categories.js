@@ -44,7 +44,14 @@ exports.get_categories_from_lang = async (lang="en")=> {
             where("category", '==', 1),
             orderBy('queue','asc')
           );
-        let [querySnapshot1, querySnapshot2] = await Promise.all([getDocs(q), getDocs(q2)]);
+
+          let q3 = query(
+            collection(firebase.db, "testdata"),
+            where("category", '==', 3),
+            orderBy('queue','asc')
+          );
+
+        let [querySnapshot1, querySnapshot2,querySnapshot3] = await Promise.all([getDocs(q), getDocs(q2),getDocs(q3)]);
         if(querySnapshot1.empty){
             //THERE IS NO TEST FOR THIS LANGUAGE
             q = query(
@@ -56,7 +63,18 @@ exports.get_categories_from_lang = async (lang="en")=> {
               );
               querySnapshot1 = await getDocs(q);
         }
-        const combinedResults = querySnapshot2.docs.concat(querySnapshot1.docs);
+        if(querySnapshot3.empty){
+            //THERE IS NO TEST FOR THIS LANGUAGE
+            q3 = query(
+                collection(firebase.db, "testdata"),
+                where("lang", '==', "en"),
+                where("category","==",3),
+                orderBy('category','asc'),
+                orderBy('queue','asc')
+              );
+              querySnapshot3 = await getDocs(q);
+        }
+        const combinedResults = querySnapshot2.docs.concat(querySnapshot1.docs,querySnapshot3.docs);
         if (!combinedResults.empty) {
             let data = [];
             combinedResults.map(doc => {

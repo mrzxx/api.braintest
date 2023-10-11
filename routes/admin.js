@@ -14,8 +14,15 @@ router.post('/test/add', perm(),adminController.createTest);
 router.post('/test/question/add',perm(),adminController.cpUpload, adminController.addQuestion);
 //Test'e soru ekleme **İSTEĞİ**
 router.post('/test/question/delete/2',perm(),adminController.cpUpload, adminController.deleteQuestionTypeText);
+
+router.post('/test/question/delete/3',perm(),adminController.cpUpload, adminController.deleteQuestionTypeFunny);
 //Test'e soru ekleme **İSTEĞİ**
 router.post('/test/question/add/2',perm(),adminController.cpUpload, adminController.addQuestionTypeText);
+
+//Test'e soru ekleme **İSTEĞİ**
+router.post('/test/question/add/3',perm(),adminController.cpUpload, adminController.addQuestionTypeIMGText);
+
+
 //Şık Güncelleme
 router.post('/test/answer/update', perm(),adminController.updateQuestionAnswer);
 //Soru PUAN Güncelleme

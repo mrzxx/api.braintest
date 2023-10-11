@@ -40,7 +40,7 @@ exports.get_app_version = async (req,res,next) => {
         }
         res.status(200).json(data);
     } catch (error) {
-        console.log(error);
+        //console.log(error);
         next(error);
     }
 }
@@ -54,7 +54,7 @@ exports.send_notification_about_test = async () => {
         let totalNot = 0;
         let users = await userdataModel.get_all_user();
         for (let index = 0; index < users.length; index++) {
-
+            
 
 
             const user = users[index];
@@ -70,7 +70,8 @@ exports.send_notification_about_test = async () => {
                 let model = {
                     lang:'en',
                     testresult:user.data.testresult,
-                    token:user.data.devicetoken
+                    token:user.data.devicetoken,
+                    userId:user.id
                 }
                 if(user.data.lang != undefined){model.lang = user.data.lang;}
 
@@ -107,7 +108,7 @@ exports.send_notification_about_test = async () => {
                         title:title,
                         body:'Eyvallah sayende 100kya yaklaşıyoruz.'
                     }
-                    let ret = await firebaseNotification(noti,model.token);
+                    let ret = await firebaseNotification(noti,model.token,model.userId);
                     
                     totalNot+=1;
                 }else if(test2info != 0){
@@ -117,7 +118,7 @@ exports.send_notification_about_test = async () => {
                         title:title,
                         body:'Eyvallah sayende 100kya yaklaşıyoruz.'
                     }
-                    let ret = await firebaseNotification(noti,model.token);
+                    let ret = await firebaseNotification(noti,model.token,model.userId);
                     
                     totalNot+=1;
                 }else{
@@ -125,7 +126,7 @@ exports.send_notification_about_test = async () => {
                         title:"Daha fazla test çözebilmek için",
                         body:'Abone ol seri köz lazım.Panele bilgi gonderildi bir kullanici daha sinirda.'
                     }
-                    let ret = await firebaseNotification(noti,model.token);
+                    let ret = await firebaseNotification(noti,model.token,model.userId);
                     
                     totalNot+=1;
                 }
@@ -144,11 +145,21 @@ exports.send_notification_about_test = async () => {
         }
         return totalNot;
     } catch (error) {
-        console.error(error);
+            try {
+                if(error.firebaseError.message == "Requested entity was not found."){
+                    console.log(error.userId);
+                    let killDevice = await userdataModel.update_user_device_token(error.userId,'');
+                    if(!killDevice){
+                        throw error;
+                    }
+                }else{
+                    throw error;
+                }
+            } catch (error2) {
+                throw error2;
+            }
+            
     }
-
-
-
 }
 
 
@@ -169,7 +180,7 @@ exports.send_notification_custom = async (req,res,next) => {
 
             const user = users[index];
             //HERE LOG
-            console.log(user.data.devicetoken);
+            //console.log(user.data.devicetoken);
             //HERE LOG
             if(user.data.devicetoken != undefined){
             

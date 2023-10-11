@@ -175,6 +175,58 @@ exports.addQuestionTypeText = async (req,res,next) => {
 }
 //Completed v2
 
+
+
+
+//Completed v2
+exports.addQuestionTypeIMGText = async (req,res,next) => {
+
+    try {
+        const testinfo = await testdataModel.get_test_by_id(req.body.testid);
+        data = testinfo.questions;
+        let lastId;
+        let index = parseInt((Object.keys(data).length));//new index
+        if(index == 0 || data == []){
+            lastId=1;
+        }else{
+            lastId = parseInt(data[index-1]["questionid"]) + 1;
+        }
+        //Question UPLAOD
+        let metadata = {
+            contentType: req.files["question"][0]["mimetype"]
+        };
+        let qurl = await adminModel.uploadFile(req.body.testid,lastId,"question.svg",req.files["question"][0]["buffer"],metadata);
+        data[index] = {answerid:1,answers:[],questionid:lastId,url:qurl};
+
+        let carray = (req.body.choices).split('**');
+        for (let j = 0; j < carray.length; j++) {
+            let choice = carray[j].trim();
+            if(choice != ""){
+                data[index].answers.push({id:data[index].answers.length+1,url:choice});
+            }
+            
+        }
+
+
+
+        let check = await adminModel.updateTestQuestions(req.body.testid,data);
+        if(check == 1){
+            res.redirect('/admin/test/'+req.body.testid);        
+        }else{
+            console.log(check);
+            res.end("Hatalı");
+        }
+    } catch (error) {
+        next(error);
+    }
+
+
+}
+//Completed v2
+
+
+
+
 //Completed v2
 exports.updateQuestionAnswer = async (req, res,next) => {
 
@@ -232,6 +284,32 @@ exports.deleteQuestionTypeText = async (req, res,next) => {
     } catch (error) {
         next(error);
     }
+    
+}
+//Completed v2
+
+
+//Completed v2
+exports.deleteQuestionTypeFunny = async (req, res,next) => {
+
+    try {
+        const testinfo = await testdataModel.get_test_by_id(req.body.testid);   
+        let data = testinfo.questions;
+        for (let i = 0; i < Object.keys(data).length; i++) {
+            if(data[i]["questionid"] == req.body.questionid){
+                console.log("here2");
+                let j = await adminModel.deleteFilesInFolder('testdata/'+req.body.testid+'/'+req.body.questionid);
+                console.log("here22");
+                data.splice(i, 1);
+            }
+        }
+        let check = await adminModel.updateTestQuestions(req.body.testid,data);
+        res.json(check);
+    } catch (error) {
+        console.error(error);
+        next(error);
+    }
+
     
 }
 //Completed v2

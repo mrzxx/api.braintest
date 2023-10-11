@@ -21,7 +21,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 //Admin Routes here.
-app.use('/admin', adminRoutes);
+//app.use('/admin', adminRoutes);
 
 //Version Control here.
 app.get('/version',userdataController.get_app_version);
@@ -35,18 +35,39 @@ app.use(generalRoutes);
 
 
 
-async function test(){
-  let data = await userData.send_notification_about_test();
-  console.log(data);
+let intervalInMilliseconds;
+
+async function test() {
+  try {
+    console.log("Bildirim paketi yayınlandı."+intervalInMilliseconds+" saniye.");
+    let data = await userData.send_notification_about_test();
+    
+    // Güncel interval'i al
+    let updatedData = await userdataModel.get_app_version();
+    intervalInMilliseconds = updatedData.notification * 1000;
+    get_time();
+  } catch (error) {
+    console.error(error);
+  }
+
 }
 
-async function get_time(){
-  let data = await userdataModel.get_app_version();
-  let time = data.notification;
-  const intervalInMilliseconds = time * 1000;
-  setInterval(test, intervalInMilliseconds);
+async function get_time() {
+  try {
+    let data = await userdataModel.get_app_version();
+    let time = data.notification;
+    intervalInMilliseconds = time * 1000;
+    
+    setTimeout(test, intervalInMilliseconds);
+
+  } catch (error) {
+    console.error(error);
+  }
+
 }
-//get_time();
+
+get_time();
+
 
 
 

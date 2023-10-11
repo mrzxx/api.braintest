@@ -1,5 +1,8 @@
 const admin = require('./admin');
-async function sendNotification (data,token) {
+async function sendNotification (data,token,userId="") {
+    if(token == "" || token == undefined){
+        return -1;
+    }
     try {
         let message = {
             notification: data,
@@ -9,8 +12,12 @@ async function sendNotification (data,token) {
         console.log('Bildirim gönderildi:', response);
         return response;
     } catch (error) {
-        console.error(error);
-        throw error;
+        console.log(error);
+        let errorObject = {
+            firebaseError:error,
+            userId:userId
+        }
+        throw errorObject;
     }
 }
 module.exports = sendNotification;

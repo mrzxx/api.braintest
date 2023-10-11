@@ -1,6 +1,6 @@
 const firebase = require('../database/database');
 const { getFirestore, collection, getDocs, getDoc, setDoc, updateDoc, doc,query,where,orWhere ,orderBy,limit } = require('firebase/firestore');
-const { getStorage, ref, uploadBytes, listAll, getBytes, getDownloadURL } = require('firebase/storage');
+const { getStorage, ref, uploadBytes, listAll, getBytes, getDownloadURL,deleteObject } = require('firebase/storage');
 
 
 exports.updateTestQuestions = async (testid,questions) => {
@@ -73,6 +73,26 @@ const getFileRef = (name) => {
     const storageRef = ref(firebase.storage, name);
     return storageRef;
 }
+
+
+
+
+
+exports.deleteFilesInFolder = async (folderPath) => {
+    try {
+      console.log("here1");
+      const listResult = await listAll(ref(firebase.storage, folderPath));
+  
+      const deletePromises = listResult.items.map(item => deleteObject(item));
+  
+      await Promise.all(deletePromises);
+  
+      console.log('Klasör içindeki dosyalar başarıyla silindi.');
+    } catch (error) {
+      console.error('Hata:', error);
+    }
+}
+
 
 
 exports.createTest = async (data) => {

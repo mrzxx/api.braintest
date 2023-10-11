@@ -25,11 +25,13 @@ exports.show_categories_from_lang = async (req,res,next) => {
         let user_sub = req.user.subscription;
         
         const data = await categoryModel.get_categories_from_lang(req.params.lang);
-        let returns = [{id:1,title:"Raven Test",tests:[],iq:0},{id:2,title:"Logic Test",tests:[],iq:0}];   
+        let returns = [{id:1,title:"Raven Test",tests:[],iq:0},{id:2,title:"Logic Test",tests:[],iq:0},{id:3,title:"Funny Test",tests:[],iq:0}];   
         let raventotal = 0; 
         let ravensolvedcount = 0;
         let logictotal = 0; 
         let logicsolvedcount = 0;
+        let funnytotal = 0; 
+        let funnysolvedcount = 0;
         for (let i = 0; i < data.length; i++) {
             let pick = data[i];
             //pick.questions = data[i].questions;
@@ -52,6 +54,13 @@ exports.show_categories_from_lang = async (req,res,next) => {
                 }
                 if(data[i].requiredtestid == 0) pick.locked = false;
                 returns[0].tests.push(pick);
+            }else if(pick.category == 3){
+                if(pick.solved){
+                    funnytotal += pick.iq;
+                    funnysolvedcount++;
+                }
+                if(data[i].requiredtestid == 0) pick.locked = false;
+                returns[2].tests.push(pick);
             }else{
                 if(pick.solved){
                     logictotal += pick.iq;
