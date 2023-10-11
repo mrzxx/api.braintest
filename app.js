@@ -73,10 +73,12 @@ if(production){
   });
 };
 */
-//For localhost:
+
+
+//RUN SERVER
 app.listen(port, () => {
   console.log(`Server ${port} portunda başlatıldı.`);
 });
-//RUN SERVER
+
 
 
