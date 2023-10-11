@@ -6,17 +6,17 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 //For server.
-const production = false;
+const production = true;
 
-if(production){
-  const https = require('https');
-  const http = require('http');
-  const fs = require('fs');
-  const options = {
-    key: fs.readFileSync('./cert/key.pem'),
-    cert: fs.readFileSync('./cert/cert.pem')
-  };
-}
+
+const https = require('https');
+const http = require('http');
+const fs = require('fs');
+const options = {
+  key: fs.readFileSync('./cert/key.pem'),
+  cert: fs.readFileSync('./cert/cert.pem')
+};
+
 //For server.
 
 //Inc's here.
