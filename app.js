@@ -6,18 +6,6 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 //For server.
-const production = true;
-
-
-const https = require('https');
-const http = require('http');
-const fs = require('fs');
-const options = {
-  key: fs.readFileSync('./cert/key.pem'),
-  cert: fs.readFileSync('./cert/cert.pem')
-};
-
-//For server.
 
 //Inc's here.
 const errorHandler = require('./middleware/error');
@@ -73,6 +61,7 @@ app.use(error404Handler);
 
 //RUN SERVER
 //For server:
+/*
 if(production){
   const httpServer = http.createServer(app);
   const httpsServer = https.createServer(options, app);
@@ -83,12 +72,11 @@ if(production){
       console.log('HTTP server is running on port 80');
   });
 };
+*/
 //For localhost:
-if(!production){
-  app.listen(port, () => {
-    console.log(`Server ${port} portunda başlatıldı.`);
-  });
-}
+app.listen(port, () => {
+  console.log(`Server ${port} portunda başlatıldı.`);
+});
 //RUN SERVER
 
 
