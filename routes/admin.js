@@ -1,24 +1,26 @@
 const express = require('express');
 const router = express.Router();
 
+const perm = require('../middleware/perm');
+
 const adminController = require('../controllers/admin');
 //Tüm testleri listeler **EKRANI**
-router.get('/:lang/test', adminController.showTest);
+router.get('/:lang/test',perm(),adminController.showTest);
 //Test'i oluşturma **EKRANI**
-router.get('/:lang/test/add', adminController.getAddTest);
+router.get('/:lang/test/add', perm(),adminController.getAddTest);
 //Test'i oluşturma **İSTEĞİ**
-router.post('/test/add', adminController.createTest);
+router.post('/test/add', perm(),adminController.createTest);
 //Test'e soru ekleme **İSTEĞİ**
-router.post('/test/question/add',adminController.cpUpload, adminController.addQuestion);
+router.post('/test/question/add',perm(),adminController.cpUpload, adminController.addQuestion);
 //Test'e soru ekleme **İSTEĞİ**
-router.post('/test/question/delete/2',adminController.cpUpload, adminController.deleteQuestionTypeText);
+router.post('/test/question/delete/2',perm(),adminController.cpUpload, adminController.deleteQuestionTypeText);
 //Test'e soru ekleme **İSTEĞİ**
-router.post('/test/question/add/2',adminController.cpUpload, adminController.addQuestionTypeText);
+router.post('/test/question/add/2',perm(),adminController.cpUpload, adminController.addQuestionTypeText);
 //Şık Güncelleme
-router.post('/test/answer/update', adminController.updateQuestionAnswer);
+router.post('/test/answer/update', perm(),adminController.updateQuestionAnswer);
 //Soru PUAN Güncelleme
-router.post('/test/question/update/iqscore', adminController.updateQuestionIQVal);
+router.post('/test/question/update/iqscore', perm(),adminController.updateQuestionIQVal);
 //Test'in bilgilerini ve içindeki soruları çekme ve soruların cevaplarını belirleyebilme ekranı ve testi güncelleyebilme **EKRANI**
-router.get('/test/:testid', adminController.getTestDetail);
-router.get('/test/:testid/:lang', adminController.getTestDetail);
+router.get('/test/:testid', perm(),adminController.getTestDetail);
+router.get('/test/:testid/:lang', perm(),adminController.getTestDetail);
 module.exports = router;

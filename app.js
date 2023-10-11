@@ -5,8 +5,6 @@ const bodyParser = require('body-parser');
 const app = express();
 const port = process.env.PORT || 3000;
 
-//For server.
-
 //Inc's here.
 const errorHandler = require('./middleware/error');
 const error404Handler = require('./middleware/error404');
@@ -16,12 +14,17 @@ const adminRoutes = require('./routes/admin');
 const userData = require('./controllers/userdata');
 const userdataModel =  require('./models/userdata');
 
+const userdataController = require('./controllers/userdata');
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
 //Admin Routes here.
 app.use('/admin', adminRoutes);
+
+//Version Control here.
+app.get('/version',userdataController.get_app_version);
 
 //Auth module here.
 app.use(auth);

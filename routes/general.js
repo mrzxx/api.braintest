@@ -12,7 +12,7 @@ router.get('/test/:testid', testdataController.show_test_by_id);
 router.get('/answers/:testid', testdataController.check_solved_test_answers);
 router.post('/test/:testid', testdataController.complete_test);
 router.get('/profile', userdataController.get_profile);
-router.get('/version', userdataController.get_app_version);
+//router.get('/version', userdataController.get_app_version);
 
 
 module.exports = router;
