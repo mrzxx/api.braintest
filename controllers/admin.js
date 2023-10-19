@@ -110,13 +110,16 @@ exports.addQuestion = async (req, res,next) => {
         let metadata = {
             contentType: req.files["question"][0]["mimetype"]
         };
-        let qurl = await adminModel.uploadFile(req.body.testid,lastId,"question.svg",req.files["question"][0]["buffer"],metadata);
+        
+        let dosyaUzantisi = req.files["question"][0].originalname.split('.').pop();
+        let qurl = await adminModel.uploadFile(req.body.testid,lastId,`question.${dosyaUzantisi}`,req.files["question"][0]["buffer"],metadata);
         data[index] = {answerid:1,answers:[],questionid:lastId,url:qurl};
         for (let i = 0; i < Object.keys(req.files["choices"]).length; i++) {
+            let dosyaUzantisi2 = req.files["choices"][i].originalname.split('.').pop();
             let metadata = {
                 contentType: req.files["choices"][i]["mimetype"]
             };
-            let churl = await adminModel.uploadFile(req.body.testid,lastId,`answer_${i}.svg`,req.files["choices"][i]["buffer"],metadata);
+            let churl = await adminModel.uploadFile(req.body.testid,lastId,`answer_${i}.${dosyaUzantisi2}`,req.files["choices"][i]["buffer"],metadata);
             data[index].answers.push({id:data[index].answers.length+1,url:churl});
         }
         let check = await adminModel.updateTestQuestions(req.body.testid,data);
@@ -195,7 +198,8 @@ exports.addQuestionTypeIMGText = async (req,res,next) => {
         let metadata = {
             contentType: req.files["question"][0]["mimetype"]
         };
-        let qurl = await adminModel.uploadFile(req.body.testid,lastId,"question.svg",req.files["question"][0]["buffer"],metadata);
+        let dosyaUzantisi = req.files["question"][0].originalname.split('.').pop();
+        let qurl = await adminModel.uploadFile(req.body.testid,lastId,`question.${dosyaUzantisi}`,req.files["question"][0]["buffer"],metadata);
         data[index] = {answerid:1,answers:[],questionid:lastId,url:qurl};
 
         let carray = (req.body.choices).split('**');
@@ -279,6 +283,9 @@ exports.deleteQuestionTypeText = async (req, res,next) => {
                 data.splice(i, 1);
             }
         }
+        for (let i = 0; i < Object.keys(data).length; i++) {
+            data[i]["questionid"] = i+1;
+        }
         let check = await adminModel.updateTestQuestions(req.body.testid,data);
         res.json(check);
     } catch (error) {
@@ -297,12 +304,18 @@ exports.deleteQuestionTypeFunny = async (req, res,next) => {
         let data = testinfo.questions;
         for (let i = 0; i < Object.keys(data).length; i++) {
             if(data[i]["questionid"] == req.body.questionid){
-                console.log("here2");
+         
                 let j = await adminModel.deleteFilesInFolder('testdata/'+req.body.testid+'/'+req.body.questionid);
-                console.log("here22");
+              
                 data.splice(i, 1);
             }
         }
+
+        for (let i = 0; i < Object.keys(data).length; i++) {
+            data[i]["questionid"] = i+1;
+        }
+
+
         let check = await adminModel.updateTestQuestions(req.body.testid,data);
         res.json(check);
     } catch (error) {
@@ -313,3 +326,4 @@ exports.deleteQuestionTypeFunny = async (req, res,next) => {
     
 }
 //Completed v2
+

@@ -83,7 +83,7 @@
         <ul>
             <% for (var i = 0; i < data["questions"].length; i++) { %>
             <li>
-                <strong>QuestionId: <%= data["questions"][i]["questionid"] %></strong><br>
+                <strong>QuestionId: <%= data["questions"][i]["questionid"] %></strong><a style="margin-left:15px;" href="#" onclick="deleteQuestionTypeFunny(this)" questionid="<%=data[`questions`][i]["questionid"]%>">DELETE (X)</a><br>
                 <span>IQ Score: </span>
                 <strong class="iqscorewrite" id="iqscore<%=data["questions"][i]["questionid"]%>"><%= data["questions"][i]["iqscore"] %></strong><br>
                 <input type="text" name="" id="textbox<%= data["questions"][i]["questionid"] %>">

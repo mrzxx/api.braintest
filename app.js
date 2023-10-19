@@ -21,7 +21,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 //Admin Routes here.
-//app.use('/admin', adminRoutes);
+app.use('/admin', adminRoutes);
 
 //Version Control here.
 app.get('/version',userdataController.get_app_version);
@@ -66,7 +66,7 @@ async function get_time() {
 
 }
 
-get_time();
+//get_time();
 
 
 
