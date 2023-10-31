@@ -25,6 +25,39 @@ exports.update_user_testresult = async (userId,testresult)=> {
     }
 }
 
+
+
+exports.add_user_teststart = async (userId,testid)=> {
+    try {
+        if(req.user.teststart == undefined || req.user.teststart == [] || req.user.teststart == ""){
+            let teststart = [];
+            teststart.push(testid)
+        }else{
+            let teststart = req.user.teststart;
+            if (!teststart.includes(testid)) {
+                teststart.push(testid);       
+            }
+        }
+        const docSnapshot = await updateDoc(doc(firebase.db, "userdata", userId), {
+            teststart: teststart
+        });
+        return docSnapshot;
+        //const docSnapshot = await updateDoc(doc(firebase.db, 'userdata', userId),{testresult:testresult});
+/*
+        if (docSnapshot) {
+            return true;
+        }else{
+            console.log(docSnapshot);
+            const error = new Error('Kullanıcı güncellerken problem yaşandı.');
+            error.status = 500;
+            throw error;
+        }
+*/
+    } catch (error) {
+        throw error;
+    }
+}
+
 exports.get_app_version = async ()=> {
     try {
 
