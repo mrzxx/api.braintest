@@ -29,17 +29,22 @@ exports.update_user_testresult = async (userId,testresult)=> {
 
 exports.add_user_teststart = async (userId,teststart,testid)=> {
     try {
+   
         if(teststart == undefined || teststart == [] || teststart == ""){
-            let teststart = [];
+            teststart = [];
             teststart.push(testid)
         }else{
+  
             if (!teststart.includes(testid)) {
-                teststart.push(testid);       
+        
+                teststart.push(parseInt(testid));       
             }
         }
+  
         const docSnapshot = await updateDoc(doc(firebase.db, "userdata", userId), {
             teststart: teststart
         });
+
         return docSnapshot;
         //const docSnapshot = await updateDoc(doc(firebase.db, 'userdata', userId),{testresult:testresult});
 /*
