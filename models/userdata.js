@@ -27,13 +27,12 @@ exports.update_user_testresult = async (userId,testresult)=> {
 
 
 
-exports.add_user_teststart = async (userId,testid)=> {
+exports.add_user_teststart = async (userId,teststart,testid)=> {
     try {
-        if(req.user.teststart == undefined || req.user.teststart == [] || req.user.teststart == ""){
+        if(teststart == undefined || teststart == [] || teststart == ""){
             let teststart = [];
             teststart.push(testid)
         }else{
-            let teststart = req.user.teststart;
             if (!teststart.includes(testid)) {
                 teststart.push(testid);       
             }
