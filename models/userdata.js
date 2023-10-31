@@ -37,7 +37,7 @@ exports.add_user_teststart = async (userId,teststart,testid)=> {
   
             if (!teststart.includes(testid)) {
         
-                teststart.push(parseInt(testid));       
+                teststart.push(testid);       
             }
         }
   
