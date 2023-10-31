@@ -35,7 +35,7 @@
                 <select class="form-control" name="requiredtestid" id="">
                     <option value="0">No Required Test</option>
                     <% Object.keys(data).forEach(function(prop) { %>
-                        <option value="<%-prop%>"><%- data[prop]["title"] %></option>                       
+                        <option value="<%- data[prop]['testid']%>"><%- data[prop]["title"] %></option>                       
                      <% }); %>
                 </select>
                 

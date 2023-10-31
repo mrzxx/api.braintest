@@ -106,7 +106,7 @@ exports.send_notification_about_test = async () => {
                     let title = test1info.title
                     let noti = {
                         title:title,
-                        body:'Eyvallah sayende 100kya yaklaşıyoruz.'
+                        body:'Solve test and improve your brain power!'
                     }
                     let ret = await firebaseNotification(noti,model.token,model.userId);
                     
@@ -116,15 +116,7 @@ exports.send_notification_about_test = async () => {
                     let title = test2info.title
                     let noti = {
                         title:title,
-                        body:'Eyvallah sayende 100kya yaklaşıyoruz.'
-                    }
-                    let ret = await firebaseNotification(noti,model.token,model.userId);
-                    
-                    totalNot+=1;
-                }else{
-                    let noti = {
-                        title:"Daha fazla test çözebilmek için",
-                        body:'Abone ol seri köz lazım.Panele bilgi gonderildi bir kullanici daha sinirda.'
+                        body:'Solve test and improve your brain power!'
                     }
                     let ret = await firebaseNotification(noti,model.token,model.userId);
                     

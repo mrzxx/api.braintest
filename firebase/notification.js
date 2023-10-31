@@ -9,7 +9,7 @@ async function sendNotification (data,token,userId="") {
             token: token
         };
         let response = await admin.messaging().send(message);
-        console.log('Bildirim gönderildi:', response);
+        //console.log('Bildirim gönderildi:', response);
         return response;
     } catch (error) {
         console.log(error);
