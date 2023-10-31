@@ -10,7 +10,7 @@ exports.show_test_by_id = async (req,res,next) => {
             error.status = 404;  // İsteğe bağlı: Hata durumu kodunu belirtebiliriz
             throw error;
         }
-        userdataModel.add_user_teststart(req.headers['authorization'],req.user.teststart,req.params.testid);
+        //userdataModel.add_user_teststart(req.headers['authorization'],req.user.teststart,req.params.testid);
         
         res.json(show_test_by_id);
 
