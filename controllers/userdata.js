@@ -55,22 +55,22 @@ exports.send_notification_about_test = async () => {
         let users = await userdataModel.get_all_user();
         for (let index = 0; index < users.length; index++) {
             
-
+            
 
             const user = users[index];
             //HERE LOG
             //console.log(user.data.devicetoken);
             //HERE LOG
-            if(user.data.devicetoken != undefined){
+            if(user.data.deviceToken != undefined && user.data.deviceToken != ""){
                 
-
+            
             
 
 
                 let model = {
                     lang:'en',
                     testresult:user.data.testresult,
-                    token:user.data.devicetoken,
+                    token:user.data.deviceToken,
                     userId:user.id
                 }
                 if(user.data.lang != undefined){model.lang = user.data.lang;}
@@ -108,8 +108,15 @@ exports.send_notification_about_test = async () => {
                         title:title,
                         body:'Solve test and improve your brain power!'
                     }
-                    let ret = await firebaseNotification(noti,model.token,model.userId);
                     
+                    let ret = await firebaseNotification(noti,model.token,model.userId);
+               
+                    if(ret==-2){
+                        let killDevice = await userdataModel.update_user_device_token(model.userId,'');
+                        if(!killDevice){
+                            throw error;
+                        }
+                    }
                     totalNot+=1;
                 }else if(test2info != 0){
               
@@ -118,8 +125,15 @@ exports.send_notification_about_test = async () => {
                         title:title,
                         body:'Solve test and improve your brain power!'
                     }
-                    let ret = await firebaseNotification(noti,model.token,model.userId);
                     
+                    let ret = await firebaseNotification(noti,model.token,model.userId);
+                  
+                    if(ret==-2){
+                        let killDevice = await userdataModel.update_user_device_token(model.userId,'');
+                        if(!killDevice){
+                            throw error;
+                        }
+                    }
                     totalNot+=1;
                 }
                 //FOUND AND SEND NOTIFICATION AREA
@@ -137,6 +151,7 @@ exports.send_notification_about_test = async () => {
         }
         return totalNot;
     } catch (error) {
+        /*
             try {
                 if(error.firebaseError.message == "Requested entity was not found."){
                     console.log(error.userId);
@@ -150,6 +165,8 @@ exports.send_notification_about_test = async () => {
             } catch (error2) {
                 throw error2;
             }
+            */
+           throw error;
             
     }
 }
@@ -174,12 +191,12 @@ exports.send_notification_custom = async (req,res,next) => {
             //HERE LOG
             //console.log(user.data.devicetoken);
             //HERE LOG
-            if(user.data.devicetoken != undefined){
+            if(user.data.deviceToken != undefined){
             
                 let model = {
                     lang:'en',
                     testresult:user.data.testresult,
-                    token:user.data.devicetoken
+                    token:user.data.deviceToken
                 }
                 if(user.data.lang != undefined){model.lang = user.data.lang;}
 

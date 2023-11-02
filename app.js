@@ -15,6 +15,7 @@ const userData = require('./controllers/userdata');
 const userdataModel =  require('./models/userdata');
 
 const userdataController = require('./controllers/userdata');
+const sendNotification = require('./firebase/notification');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -39,9 +40,9 @@ let intervalInMilliseconds;
 
 async function test() {
   try {
-    console.log("Bildirim paketi yayınlandı."+intervalInMilliseconds+" saniye.");
+
     let data = await userData.send_notification_about_test();
-    
+    console.log("Bildirim paketi yayınlandı",data," kullanıcı etkilendi.");
     // Güncel interval'i al
     let updatedData = await userdataModel.get_app_version();
     intervalInMilliseconds = updatedData.notification * 1000;
@@ -68,7 +69,7 @@ async function get_time() {
 
 get_time();
 
-
+//sendNotification({title:'Raven Test Çöz',body:'Solve test and improve your brain power!'},'e-9BBc6STsCB4eHXFogLtz:APA91bHlGwSGxRpta7J8rleMjr_YH2r8LnWWZegOnSEXzCbBY4V0TPupleHzOcRCTsQ3tpmGhfVmyf8lK8AfWGV44icomSPFXS3qvWgSaXn4O6rKfNwrZU_Y5ZQ6EzFkF--LhFLWxVQw');
 
 
 

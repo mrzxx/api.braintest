@@ -101,10 +101,10 @@ exports.get_all_user = async ()=> {
 
 
 
-exports.update_user_device_token = async (userId,devicetoken)=> {
+exports.update_user_device_token = async (userId,deviceToken)=> {
     try {
         const docSnapshot = await updateDoc(doc(firebase.db, "userdata", userId), {
-            devicetoken: devicetoken
+            deviceToken: deviceToken
         });
         return 1;
     } catch (error) {
