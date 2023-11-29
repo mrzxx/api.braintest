@@ -80,7 +80,6 @@ const getFileRef = (name) => {
 
 exports.deleteFilesInFolder = async (folderPath) => {
     try {
-      console.log("here1");
       const listResult = await listAll(ref(firebase.storage, folderPath));
   
       const deletePromises = listResult.items.map(item => deleteObject(item));

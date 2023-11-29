@@ -3,6 +3,8 @@ const testdataModel = require('../models/testdata');
 const userdataModel = require('../models/userdata');
 const adminModel = require('../models/admin');
 const multer = require('multer');
+const sharp = require('sharp');
+const fs = require('fs');
 exports.cpUpload = multer().fields([{ name: 'question', maxCount: 1 },{ name: 'choices', maxCount: 6 },]);
 
 
@@ -93,6 +95,20 @@ exports.createTest = async (req,res,next) => {
 }   
 //Completed v2
 
+
+async function convertSvgToJpgBuffer(svgBuffer) {
+    try {
+      // Sharp kütüphanesini kullanarak SVG'yi JPEG'e dönüştür
+      const jpgBuffer = await sharp(svgBuffer)
+        .toFormat('png')
+        .toBuffer();
+  
+      return jpgBuffer;
+    } catch (error) {
+      console.error('Dönüştürme sırasında bir hata oluştu:', error);
+      throw error; // Hata durumunda isteği atan koda bilgi vermek için hatayı fırlat
+    }
+  }
 //Completed v2
 exports.addQuestion = async (req, res,next) => {
 
@@ -108,18 +124,23 @@ exports.addQuestion = async (req, res,next) => {
         }
         //Question UPLAOD
         let metadata = {
-            contentType: req.files["question"][0]["mimetype"]
+            //contentType: req.files["question"][0]["mimetype"]
+            contentType: 'image/png'
         };
-        
-        let dosyaUzantisi = req.files["question"][0].originalname.split('.').pop();
-        let qurl = await adminModel.uploadFile(req.body.testid,lastId,`question.${dosyaUzantisi}`,req.files["question"][0]["buffer"],metadata);
+        let createJpeg = await convertSvgToJpgBuffer(req.files["question"][0]["buffer"]);
+        //let dosyaUzantisi = req.files["question"][0].originalname.split('.').pop();
+        let dosyaUzantisi = 'png';
+        let qurl = await adminModel.uploadFile(req.body.testid,lastId,`question.${dosyaUzantisi}`,createJpeg,metadata);
         data[index] = {answerid:1,answers:[],questionid:lastId,url:qurl};
         for (let i = 0; i < Object.keys(req.files["choices"]).length; i++) {
-            let dosyaUzantisi2 = req.files["choices"][i].originalname.split('.').pop();
+            //let dosyaUzantisi2 = req.files["choices"][i].originalname.split('.').pop();
+            let dosyaUzantisi2 = 'png';
             let metadata = {
-                contentType: req.files["choices"][i]["mimetype"]
+                //contentType: req.files["choices"][i]["mimetype"]
+                contentType: 'image/png'
             };
-            let churl = await adminModel.uploadFile(req.body.testid,lastId,`answer_${i}.${dosyaUzantisi2}`,req.files["choices"][i]["buffer"],metadata);
+            let createJPEGA = await convertSvgToJpgBuffer(req.files["choices"][i]["buffer"]);
+            let churl = await adminModel.uploadFile(req.body.testid,lastId,`answer_${i}.${dosyaUzantisi2}`,createJPEGA,metadata);
             data[index].answers.push({id:data[index].answers.length+1,url:churl});
         }
         let check = await adminModel.updateTestQuestions(req.body.testid,data);
